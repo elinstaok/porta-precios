@@ -1,144 +1,136 @@
+/* RESET BÁSICO */
 * {
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
+/* CONTENEDOR GENERAL */
 body {
-  margin: 15px;
+  background: #f2f2f2;
 }
 
-.controles {
-  margin-bottom: 15px;
-}
-
-button {
-  padding: 8px 14px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-/* HOJA A4 DIVIDIDA EN 4 */
+/* HOJA A4 */
 .hoja {
+  width: 210mm;
+  height: 297mm;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  background: white;
 }
 
-/* CARTEL */
+/* CARTEL INDIVIDUAL */
 .cartel {
   border: 2px dashed #000;
-  padding: 12px;
-  padding-bottom: 65px;
-  position: relative;
-  min-height: 260px;
-}
-
-/* DECORACIÓN CONTORNO */
-.cartel::before,
-.cartel::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-}
-
-.cartel::before {
-  top: 6px;
-  left: 6px;
-  border-top: 3px solid #000;
-  border-left: 3px solid #000;
-}
-
-.cartel::after {
-  bottom: 6px;
-  right: 6px;
-  border-bottom: 3px solid #000;
-  border-right: 3px solid #000;
-}
-
-/* MODO ARRIBA */
-.modo-top {
+  padding: 10mm;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* ENCABEZADO MODO */
+.modo-header {
+  text-align: center;
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 6mm;
 }
 
-.logo-modo {
-  width: 95px;
+.modo-header img {
+  height: 20mm;
+  vertical-align: middle;
 }
 
-/* INPUTS */
-.input-nombre,
-.input-precio {
-  width: 100%;
-  padding: 6px;
-  margin-bottom: 6px;
-  font-size: 14px;
+/* PRODUCTO */
+.producto {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 4mm;
 }
 
 /* PRECIOS */
-.antes {
+.precios {
   text-align: center;
+}
+
+.precio-antes {
   font-size: 16px;
   text-decoration: line-through;
-  opacity: 0.7;
-  margin-top: 6px;
+  color: #555;
 }
 
-.precio-con-logo {
+.precio-ahora {
+  font-size: 36px;
+  font-weight: bold;
+  color: #c00;
+  margin-top: 2mm;
+}
+
+/* LOGOS INFERIORES */
+.footer-cartel {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  gap: 12px;
+  align-items: center;
+  gap: 8mm;
+  margin-top: 6mm;
+}
+
+.footer-cartel img {
+  height: 14mm;
+}
+
+/* INPUTS (SOLO PANTALLA) */
+input {
+  width: 100%;
+  padding: 6px;
   margin-top: 4px;
+  font-size: 14px;
 }
 
-.ahora {
-  text-align: center;
-  font-weight: bold;
+/* BOTONES */
+button {
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.ahora .pesos {
-  font-size: 42px;
+/* NO IMPRIMIR */
+.no-print {
+  margin: 10px;
 }
 
-.ahora .centavos {
-  font-size: 22px;
-  vertical-align: super;
+/* ===================== */
+/* ===== IMPRESIÓN ===== */
+/* ===================== */
+
+@page {
+  size: A4;
+  margin: 0;
 }
 
-/* LOGO DIARCO ABAJO */
-.logo-diarco {
-  width: 55px;
-  opacity: 0.9;
-}
-
-/* IMPRESIÓN */
 @media print {
-  .no-print,
-  button,
-  input {
-    display: none;
-  }
-
   body {
     margin: 0;
+    padding: 0;
+    background: white;
   }
-}
-input {
-  border: 1px solid #999;
-}
 
-input:focus {
-  outline: none;
-}
+  .hoja {
+    width: 210mm;
+    height: 297mm;
+  }
 
-/* evita que seleccionen texto decorativo */
-.cartel,
-.cartel *:not(input) {
-  user-select: none;
+  .cartel {
+    border: 2px dashed #000;
+  }
+
+  input,
+  button,
+  .no-print {
+    display: none !important;
+  }
 }
