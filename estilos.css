@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 15px;
+}
+
+.controles {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 8px 14px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+/* HOJA A4 DIVIDIDA EN 4 */
+.hoja {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+/* CARTEL */
+.cartel {
+  border: 2px dashed #000;
+  padding: 12px;
+  padding-bottom: 65px;
+  position: relative;
+  min-height: 260px;
+}
+
+/* DECORACIÓN CONTORNO */
+.cartel::before,
+.cartel::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+
+.cartel::before {
+  top: 6px;
+  left: 6px;
+  border-top: 3px solid #000;
+  border-left: 3px solid #000;
+}
+
+.cartel::after {
+  bottom: 6px;
+  right: 6px;
+  border-bottom: 3px solid #000;
+  border-right: 3px solid #000;
+}
+
+/* MODO ARRIBA */
+.modo-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.logo-modo {
+  width: 95px;
+}
+
+/* INPUTS */
+.input-nombre,
+.input-precio {
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* PRECIOS */
+.antes {
+  text-align: center;
+  font-size: 16px;
+  text-decoration: line-through;
+  opacity: 0.7;
+  margin-top: 6px;
+}
+
+.precio-con-logo {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.ahora {
+  text-align: center;
+  font-weight: bold;
+}
+
+.ahora .pesos {
+  font-size: 42px;
+}
+
+.ahora .centavos {
+  font-size: 22px;
+  vertical-align: super;
+}
+
+/* LOGO DIARCO ABAJO */
+.logo-diarco {
+  width: 55px;
+  opacity: 0.9;
+}
+
+/* IMPRESIÓN */
+@media print {
+  .no-print,
+  button,
+  input {
+    display: none;
+  }
+
+  body {
+    margin: 0;
+  }
+}
+input {
+  border: 1px solid #999;
+}
+
+input:focus {
+  outline: none;
+}
+
+/* evita que seleccionen texto decorativo */
+.cartel,
+.cartel *:not(input) {
+  user-select: none;
+}

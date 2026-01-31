@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Porta Precios – Promo MODO</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div class="controles no-print">
+  <button onclick="limpiarTodo()">Limpiar todo</button>
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="hoja">
+
+  <!-- CARTEL 1 -->
+  <div class="cartel">
+
+    <!-- MODO ARRIBA -->
+    <div class="modo-top">
+      <span>PAGANDO CON</span>
+      <img src="./logo-modo.png" class="logo-modo">
+    </div>
+
+    <input class="input-nombre no-print" placeholder="Producto">
+
+    <input class="input-precio no-print" placeholder="Precio sin descuento">
+
+    <div class="antes">Antes: $<span>0,00</span></div>
+
+    <!-- PRECIO + DIARCO -->
+    <div class="precio-con-logo">
+      <div class="ahora">
+        Ahora:
+        <span class="pesos">$0</span><span class="centavos">,00</span>
+      </div>
+
+      <img src="./logo-diarco.png" class="logo-diarco">
+    </div>
+
+  </div>
+
+  <!-- DUPLICAMOS A 4 -->
+  <div class="cartel"></div>
+  <div class="cartel"></div>
+  <div class="cartel"></div>
+
+</div>
+
+<script>
+  // duplicar estructura del primer cartel
+  document.querySelectorAll('.cartel').forEach((c, i) => {
+    if (i > 0) c.innerHTML = document.querySelector('.cartel').innerHTML;
+  });
+
+  function normalizarPrecio(valor) {
+    return Number(valor.replace(/\./g, '').replace(',', '.'));
+  }
+
+  function formatear(n) {
+    const [p, c] = n.toLocaleString('es-AR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).split(',');
+    return { p, c };
+  }
+
+  document.querySelectorAll('.input-precio').forEach(input => {
+    input.addEventListener('input', () => {
+      const cartel = input.closest('.cartel');
+      const precio = normalizarPrecio(input.value);
+
+      if (isNaN(precio)) return;
+
+      const antesSpan = cartel.querySelector('.antes span');
+      const pesos = cartel.querySelector('.pesos');
+      const centavos = cartel.querySelector('.centavos');
+
+      const antes = formatear(precio);
+      const ahora = formatear(precio * 0.8);
+
+      antesSpan.textContent = `${antes.p},${antes.c}`;
+      pesos.textContent = `$${ahora.p}`;
+      centavos.textContent = `,${ahora.c}`;
+    });
+  });
+
+  function limpiarTodo() {
+    document.querySelectorAll('input').forEach(i => i.value = '');
+    document.querySelectorAll('.antes span').forEach(s => s.textContent = '0,00');
+    document.querySelectorAll('.pesos').forEach(s => s.textContent = '$0');
+    document.querySelectorAll('.centavos').forEach(s => s.textContent = ',00');
+  }
+</script>
+
+</body>
+</html>
