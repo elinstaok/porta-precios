@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Porta Precios – Finde MODO</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<div class="controles no-print">
+  <button onclick="limpiarTodo()">Limpiar todo</button>
+  <button onclick="window.print()">Imprimir</button>
+</div>
+
+<div class="hoja">
+
+  <!-- CARTEL BASE -->
+  <div class="cartel">
+
+    <!-- ENCABEZADO -->
+    <div class="header">
+      <span>PAGANDO CON</span>
+      <img src="logo-modo.png" class="logo-modo">
+    </div>
+
+    <!-- INPUTS -->
+    <input class="input-nombre no-print" placeholder="Producto">
+    <input class="input-precio no-print" placeholder="Precio sin descuento">
+
+    <!-- NOMBRE IMPRIMIBLE -->
+    <div class="nombre-producto">Nombre del producto</div>
+
+    <!-- PRECIO ANTES -->
+    <div class="antes">Antes: $<span>0,00</span></div>
+
+    <!-- PRECIO AHORA + DIARCO -->
+    <div class="precio-con-logo">
+      <div class="ahora">
+        <span class="precio-grande">$0</span><span class="centavos">,00</span>
+      </div>
+      <img src="logo-diarco.png" class="logo-diarco">
+    </div>
+
+  </div>
+
+  <!-- CLONAMOS 4 -->
+  <div class="cartel"></div>
+  <div class="cartel"></div>
+  <div class="cartel"></div>
+
+</div>
+
+<script>
+  // duplicar estructura
+  document.querySelectorAll('.cartel').forEach((c, i) => {
+    if (i > 0) c.innerHTML = document.querySelector('.cartel').innerHTML;
+  });
+
+  function normalizar(valor) {
+    return Number(valor.replace(/\./g, '').replace(',', '.'));
+  }
+
+  function formato(n) {
+    const [p, c] = n.toLocaleString('es-AR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).split(',');
+    return { p, c };
+  }
+
+  document.querySelectorAll('.input-nombre').forEach(input => {
+    input.addEventListener('input', () => {
+      const cartel = input.closest('.cartel');
+      cartel.querySelector('.nombre-producto').textContent =
+        input.value || 'Nombre del producto';
+    });
+  });
+
+  document.querySelectorAll('.input-precio').forEach(input => {
+    input.addEventListener('input', () => {
+      const cartel = input.closest('.cartel');
+      const precio = normalizar(input.value);
+      if (isNaN(precio)) return;
+
+      const antes = formato(precio);
+      const ahora = formato(precio * 0.8);
+
+      cartel.querySelector('.antes span').textContent = `${antes.p},${antes.c}`;
+      cartel.querySelector('.precio-grande').textContent = `$${ahora.p}`;
+      cartel.querySelector('.centavos').textContent = `,${ahora.c}`;
+    });
+  });
+
+  function limpiarTodo() {
+    document.querySelectorAll('input').forEach(i => i.value = '');
+    document.querySelectorAll('.nombre-producto').forEach(n => n.textContent = 'Nombre del producto');
+    document.querySelectorAll('.antes span').forEach(s => s.textContent = '0,00');
+    document.querySelectorAll('.precio-grande').forEach(p => p.textContent = '$0');
+    document.querySelectorAll('.centavos').forEach(c => c.textContent = ',00');
+  }
+</script>
+
+</body>
+</html>
