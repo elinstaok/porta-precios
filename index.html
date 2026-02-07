@@ -2,8 +2,9 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Porta Precios – Finde MODO</title>
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="./estilos.css">
 </head>
 <body>
 
@@ -20,7 +21,7 @@
     <!-- ENCABEZADO -->
     <div class="header">
       <span>PAGANDO CON</span>
-      <img src="logo-modo.png" class="logo-modo">
+      <img src="./logo-modo.png" class="logo-modo" alt="MODO">
     </div>
 
     <!-- INPUTS -->
@@ -38,7 +39,7 @@
       <div class="ahora">
         <span class="precio-grande">$0</span><span class="centavos">,00</span>
       </div>
-      <img src="logo-diarco.png" class="logo-diarco">
+      <img src="logo-diarco.png" class="logo-diarco" alt="Diarco">
     </div>
 
   </div>
@@ -51,15 +52,27 @@
 </div>
 
 <script>
+  const MAX_PRECIO = 9999999; // 9.999.999 (ajustá si querés)
+  const DESCUENTO = 0.8;      // 20% off (precio * 0.8)
+
   // duplicar estructura
   document.querySelectorAll('.cartel').forEach((c, i) => {
     if (i > 0) c.innerHTML = document.querySelector('.cartel').innerHTML;
   });
 
-  function normalizar(valor) {
-    return Number(valor.replace(/\./g, '').replace(',', '.'));
+  // Limpia caracteres raros: deja solo números, punto y coma
+  function limpiarInputPrecio(str) {
+    return (str || '').replace(/[^\d.,]/g, '');
   }
 
+  // Convierte "1.234,56" -> 1234.56
+  function normalizar(valor) {
+    if (!valor) return NaN;
+    const limpio = valor.replace(/\./g, '').replace(',', '.');
+    return Number(limpio);
+  }
+
+  // Formatea a es-AR con 2 decimales y separadores
   function formato(n) {
     const [p, c] = n.toLocaleString('es-AR', {
       minimumFractionDigits: 2,
@@ -68,22 +81,37 @@
     return { p, c };
   }
 
+  // Nombre
   document.querySelectorAll('.input-nombre').forEach(input => {
     input.addEventListener('input', () => {
       const cartel = input.closest('.cartel');
       cartel.querySelector('.nombre-producto').textContent =
-        input.value || 'Nombre del producto';
+        input.value.trim() || 'Nombre del producto';
     });
   });
 
+  // Precio (con anti-billones)
   document.querySelectorAll('.input-precio').forEach(input => {
+
+    // Mientras escriben, limpiamos letras/símbolos
     input.addEventListener('input', () => {
+      input.value = limpiarInputPrecio(input.value);
+
       const cartel = input.closest('.cartel');
       const precio = normalizar(input.value);
+
       if (isNaN(precio)) return;
 
+      if (precio <= 0) return;
+
+      // Anti "billones": evita que rompan el diseño y que sea irreal
+      if (precio > MAX_PRECIO) {
+        alert("Precio demasiado grande. Revisá que lo escribiste bien (ej: 1.299,99).");
+        return;
+      }
+
       const antes = formato(precio);
-      const ahora = formato(precio * 0.8);
+      const ahora = formato(precio * DESCUENTO);
 
       cartel.querySelector('.antes span').textContent = `${antes.p},${antes.c}`;
       cartel.querySelector('.precio-grande').textContent = `$${ahora.p}`;
